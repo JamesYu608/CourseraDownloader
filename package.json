@@ -1,0 +1,15 @@
+{
+  "name": "coursera_downloader",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "filenamify": "^2.0.0",
+    "selenium-webdriver": "^3.5.0"
+  }
+}
