@@ -9,7 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "download": "^6.2.5",
     "filenamify": "^2.0.0",
+    "mkdirp": "^0.5.1",
     "selenium-webdriver": "^3.5.0"
   }
 }
