@@ -142,9 +142,10 @@ async function getTargetLessonsIndex (driver) {
     // Loop lessons
     for (let i = 0; i < lessons.length; i++) {
       const lesson = lessons[i]
-      const playIcon = await lesson.findElements(By.css('i[class~="cif-play"]'))
+      const completedPlayIcon = await lesson.findElements(By.css('i[class~="cif-play"]')) // Finished lesson
+      const videoIcon = await lesson.findElements(By.css('i[class~="cif-item-video"]')) // Unfinished lesson
       // We only want the lesson with video
-      if (playIcon.length > 0) {
+      if (completedPlayIcon.length > 0 || videoIcon.length > 0) {
         lessonsWithVideo.push(i)
       }
     }
