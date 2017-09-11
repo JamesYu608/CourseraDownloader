@@ -4,7 +4,13 @@ const path = require('path')
 const mkdirp = require('mkdirp')
 const filenamify = require('filenamify')
 
-// Loading crawler result from app.js
+// Loading crawler result from app.js, for example:
+// "Week_1": [
+//   {
+//     "section": "Solving a More Challenging Code Problem",
+//     "lesson": "Stress Test - Implementation",
+//     "videoLink": "https://d3c33hcgiwev3.cloudfront.net/P4O7H8O2EeWu4ApYq4IbUQ.processed/full/360p/index.mp4?..."
+//   },
 const courseInfo = require('./videos/Algorithmic Toolbox.json')
 
 const DOWNLOAD_FOLDER_NAME = 'Algorithmic Toolbox'
@@ -38,11 +44,3 @@ async function save (dirPath, fileName, downloadUrl) {
 
   return `Finished: ${fileName}`
 }
-
-//
-// "Week_1": [
-//   {
-//     "section": "Welcome",
-//     "lesson": "Welcome!",
-//     "videoLink": "https://d3c33hcgiwev3.cloudfront.net/YJiV6ubAEeWIdgqHxZs34w.processed/full/360p/index.mp4?Expires=1505088000&Signature=Xavs1bR-hmahr~jwyIWgIhSLcIe8zmeRhBIPs9p~M-Ji5foYtnPmwh8E~1J~FWbcQ16WAXJyVARssVHcy812~4~cKYr8GUjyWUzAGvPngDDHQcg7tbthwBmqyeN-OMdyYljliof8tbyHLLfbo356Hz5C3w8CoJ74IFnzDhhXrMQ_&Key-Pair-Id=APKAJLTNE6QMUY6HBC5A"
-//   },
