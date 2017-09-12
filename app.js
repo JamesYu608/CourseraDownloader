@@ -10,9 +10,11 @@ const PAGE_LOAD_TIMEOUT = 15 * 1000
 const ACTION_TIMEOUT = 8 * 1000
 
 ;(async () => {
-  const driver = new webdriver.Builder()
-    .forBrowser('chrome')
-    .build()
+  let driver = new webdriver.Builder().forBrowser('chrome')
+  if (process.platform === 'win32') { // OS: Windows
+    driver = driver.usingServer('http://localhost:9515')
+  }
+  driver = driver.build()
 
   // 1. Open browser
   driver.manage().window().maximize()
