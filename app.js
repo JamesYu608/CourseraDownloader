@@ -2,13 +2,9 @@ const webdriver = require('selenium-webdriver')
 const {By, until} = webdriver
 const fs = require('fs')
 const path = require('path')
-const filenamify = require('filenamify')
 
-// Modify this part ===============================================
-const COURSE_NAME = 'Algorithmic Toolbox'
-const COURSE_URL = 'https://www.coursera.org/learn/algorithmic-toolbox/home/welcome'
+const {COURSE_NAME, COURSE_URL} = require('./course_config')
 const {COURSERA_ACCOUNT: ACCOUNT, COURSERA_PASSWORD: PW} = require('./secure_config')
-// End ============================================================
 
 const PAGE_LOAD_TIMEOUT = 15 * 1000
 const ACTION_TIMEOUT = 8 * 1000
@@ -72,7 +68,7 @@ const ACTION_TIMEOUT = 8 * 1000
     fs.mkdirSync(dirPath)
   }
   fs.writeFileSync(
-    path.resolve(dirPath, `${filenamify(COURSE_NAME)}.json`),
+    path.resolve(dirPath, `${COURSE_NAME}.json`),
     JSON.stringify(outputData, null, '  ')
   )
 
@@ -110,11 +106,17 @@ async function fetchLessonsContent (driver) {
       const lessonTitle = await lessonTitleElement.getText()
       const videoDownloadItem = driver.wait(until.elementLocated(
         By.css('li[class~="rc-LectureDownloadItem"] a')), PAGE_LOAD_TIMEOUT)
-      const videoLink = await videoDownloadItem.getAttribute('href')
+      const subtitleDownloadItem = driver.wait(until.elementLocated(
+        By.css('li[class~="rc-SubtitleDownloadItem"] a')), PAGE_LOAD_TIMEOUT)
+      const transcriptDownloadItem = driver.wait(until.elementLocated(
+        By.css('li[class~="rc-TranscriptDownloadItem"] a')), PAGE_LOAD_TIMEOUT)
+
       lessonsContent.push({
         section: sectionText,
         lesson: lessonTitle,
-        videoLink: videoLink
+        videoLink: await videoDownloadItem.getAttribute('href'),
+        subtitleLink: await subtitleDownloadItem.getAttribute('href'),
+        transcriptLink: await transcriptDownloadItem.getAttribute('href')
       })
     }
   }
@@ -155,7 +157,7 @@ async function getTargetLessonsIndex (driver) {
   return sections
 }
 
-async function getLessonList (section, driver) {
+async function getLessonList (section) {
   const lessonListLocator = By.css('div[class="item-list"]')
   // Check if it's already expanded
   const lessonList = await section.findElements(lessonListLocator)
