@@ -6,8 +6,8 @@ const path = require('path')
 const {COURSE_NAME, COURSE_URL} = require('./course_config')
 const {COURSERA_ACCOUNT: ACCOUNT, COURSERA_PASSWORD: PW} = require('./secure_config')
 
-const PAGE_LOAD_TIMEOUT = 15 * 1000
-const ACTION_TIMEOUT = 8 * 1000
+const PAGE_LOAD_TIMEOUT = 20 * 1000
+const ACTION_TIMEOUT = 10 * 1000
 
 ;(async () => {
   let driver = new webdriver.Builder().forBrowser('chrome')
@@ -47,9 +47,8 @@ const ACTION_TIMEOUT = 8 * 1000
   for (let i = 0; i < weekCount; i++) {
     // Query again because of navigating
     const weekElements = await getWeekElements(driver)
-    const week = weekElements[i]
     // 5-1. Click that week
-    week.findElement(By.css('a')).click()
+    weekElements[i].click()
     driver.wait(until.elementLocated(By.css('div[class="rc-ModuleLessons"]')), PAGE_LOAD_TIMEOUT)
 
     // 5-2. Click the first lesson
@@ -78,8 +77,8 @@ const ACTION_TIMEOUT = 8 * 1000
 })()
 
 async function getWeekElements (driver) {
-  driver.wait(until.elementLocated(By.css('ul[class~="rc-FullMenuItems"]')), PAGE_LOAD_TIMEOUT)
-  return driver.findElements(By.css('ul[class="menu-drawer"] li[class~="module-list-item"]'))
+  driver.wait(until.elementLocated(By.css('div[class="rc-WeekCollectionNavigationItem"]')), PAGE_LOAD_TIMEOUT)
+  return driver.findElements(By.css('div[class="rc-NavigationDrawer"] a[class~="rc-NavigationDrawerLink"]'))
 }
 
 async function fetchLessonsContent (driver) {
@@ -159,7 +158,7 @@ async function getTargetLessonsIndex (driver) {
   return sections
 }
 
-async function getLessonList (section) {
+async function getLessonList (section, driver) {
   const lessonListLocator = By.css('div[class="item-list"]')
   // Check if it's already expanded
   const lessonList = await section.findElements(lessonListLocator)
@@ -168,7 +167,8 @@ async function getLessonList (section) {
     return lessonList[0]
   } else {
     // Click section button and return lesson list
-    await section.findElement(By.css('button[class~="link-button"]')).click()
+    const sectionButton = await section.findElement(By.css('button[class~="link-button"]'))
+    await driver.executeScript('arguments[0].click()', sectionButton)
     return section.findElement(lessonListLocator)
   }
 }

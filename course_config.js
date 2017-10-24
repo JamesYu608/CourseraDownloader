@@ -1,8 +1,8 @@
 const filenamify = require('filenamify')
 
 // Modify this part ===============================================
-const COURSE_NAME = 'Machine Learning Foundations: A Case Study Approach'
-const COURSE_URL = 'https://www.coursera.org/learn/ml-foundations/home/welcome'
+const COURSE_NAME = 'Algorithms on Graphs'
+const COURSE_URL = 'https://www.coursera.org/learn/algorithms-on-graphs/home/welcome'
 // End ============================================================
 
 module.exports = {
